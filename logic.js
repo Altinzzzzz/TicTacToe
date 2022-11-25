@@ -22,6 +22,7 @@ restartBtn.addEventListener('click', function(){
 });
 
 function getReady(){
+    boxes.forEach(box => box.removeEventListener());
     mainArray = [
         '', '', '',
         '', '', '',
@@ -33,7 +34,7 @@ function getReady(){
             let sign = checkState();
             boxes[i].textContent = sign;
             mainArray[i] = sign;
-            checkGame();
+            checkGame(sign, mainArray);
         }, {once: true}) // once true makes it so it can only get clicked once
     }
 }
@@ -54,7 +55,7 @@ function checkState(){
     return mark;
 }
 
-function checkGame(sign = null){
+function checkGame(sign){
     if(checkWin(sign)){
         if(firstPlayer.getState){
            console.log(`The Winner is: ${secondPlayer.sign} player`); 
@@ -90,24 +91,22 @@ function checkDraw(array){
 
 
 let player = (sign, state) => {
+    
     let score = 0;
 
     this.changeScore = function(){
         score++;
     }
 
-    let getScore = () => console.log(score); //nuk kthehet score 
-    let getState = () => console.log(state); // nuk kthete state
+    let getScore = () => score; //nuk kthehet score 
+    let getState = () => state; // nuk kthete state
 
     this.changeState = function(){
-        if(this.getState() === true){
-            this.getState() = false;
-        } else {
-            this.getState() = true;
-        }
+        state = !state;
+        return state;
     }
     
-    return { sign, getState, getScore, changeScore, changeState};
+    return { sign, getState, getScore, changeScore, changeState };
     // nese ishin kthy score ose state atehere kishim mund me i ndryshu
     // prej jashtit
 }
