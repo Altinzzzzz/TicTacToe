@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    background-color: black;
+    padding: 0;
+}
+
+header{
+    padding-top: 15%;
+    display: flex;
+    color: lightskyblue;
+    justify-content: space-evenly;
+}
+
+main{
+    padding: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+.gameInterface > div{
+    border: 1px solid yellow;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    color: orangered;
+    font-size: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+}
+
+button{
+    border: 1px solid yellow;
+    color: yellow;
+    padding: 20px 45px;
+    font-size: 25px;
+    cursor: pointer; 
+}
+
+button:hover{
+    color: black;
+    background: yellow;
+    border-color: black;
+    transition: 0.4s;
+}
