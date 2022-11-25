@@ -1,23 +1,4 @@
-let firstScore = document.querySelector('#firstScore').textContent;
-let secondScore = document.querySelector('#secondScore').textContent;
-let boxes = document.querySelectorAll('.box');
-let restartBtn = document.querySelector('button');
-var array = [
-    '', '', '',
-    '', '', '',
-    '', '', ''
-]
-
-for(let i = 0; i < boxes.length; i++){
-    boxes[i].addEventListener('click', function(){
-        let sign = checkState();
-        boxes[i].textContent = sign;
-        array[i] = sign;
-        
-    }, {once: true}) // once true makes it so it can only get clicked once
-}
-
-let gameboardArray = [
+let winningCombinations = [
     [0, 1, 2],
     [0, 3, 6],
     [0, 4, 8],
@@ -25,36 +6,112 @@ let gameboardArray = [
     [2, 4, 6],
     [2, 5, 8],
     [3, 4, 5],
-    [6, 7, 8],
+    [6, 7, 8]
 ]
+var firstScore = document.querySelector('#firstScore').textContent;
+var secondScore = document.querySelector('#secondScore').textContent;
+var boxes = document.querySelectorAll('.box');
+var restartBtn = document.querySelector('button');
 
-var player = (sign, state) => {
 
-    this.changeState = function(){
-        if(this.state === true){
-            this.state = false;
-        } else {
-            this.state = true;
-        }
+restartBtn.addEventListener('click', function(){
+    getReady();
+    if(firstPlayer.getState() === false){
+        changeBoth();
     }
+});
 
-    return { sign, state, changeState};
+function getReady(){
+    mainArray = [
+        '', '', '',
+        '', '', '',
+        '', '', ''
+    ];
+
+    for(let i = 0; i < boxes.length; i++){
+        boxes[i].addEventListener('click', function(){
+            let sign = checkState();
+            boxes[i].textContent = sign;
+            mainArray[i] = sign;
+            checkGame();
+        }, {once: true}) // once true makes it so it can only get clicked once
+    }
+}
+
+function changeBoth(){
+    firstPlayer.changeState();
+    secondPlayer.changeState();
 }
 
 function checkState(){
-    let sign;
-    if(firstPlayer.state === true){
-        sign = firstPlayer.sign;
+    let mark;
+    if(firstPlayer.getState() === true){
+        mark = firstPlayer.sign;
     } else {
-        sign = secondPlayer.sign; 
+        mark = secondPlayer.sign; 
+    }
+    changeBoth();
+    return mark;
+}
+
+function checkGame(sign = null){
+    if(checkWin(sign)){
+        if(firstPlayer.getState){
+           console.log(`The Winner is: ${secondPlayer.sign} player`); 
+        } else {
+            console.log(`The Winner is: ${firstPlayer.sign} player`); 
+        } 
+    } else if(sign === null) {
+        if(checkDraw(mainArray)){
+            console.log('The game ends in a draw');
+        }
+    }
+}
+
+function checkWin(sign){
+    return winningCombinations.some(combination => {
+        return combination.every(index => {
+            return mainArray[index] == sign; 
+        })
+        // if(combination[0] == sign && combination[1] == sign && combination[2] == sign){
+        //     return true;
+        // }
+    })
+}
+
+function checkDraw(array){
+    for(let i = 0; i < array.length; i++){
+        if(array[i] != 'X' && array[i] != 'O'){
+            return false;
+        }
+    }
+    return true;
+}
+
+
+let player = (sign, state) => {
+    let score = 0;
+
+    this.changeScore = function(){
+        score++;
     }
 
-    firstPlayer.changeState();
-    secondPlayer.changeState();
+    let getScore = () => console.log(score); //nuk kthehet score 
+    let getState = () => console.log(state); // nuk kthete state
 
-    return sign;
+    this.changeState = function(){
+        if(this.getState() === true){
+            this.getState() = false;
+        } else {
+            this.getState() = true;
+        }
+    }
+    
+    return { sign, getState, getScore, changeScore, changeState};
+    // nese ishin kthy score ose state atehere kishim mund me i ndryshu
+    // prej jashtit
 }
 
 var firstPlayer = player('X', true);
 var secondPlayer = player('O', false);
-
+getReady();
